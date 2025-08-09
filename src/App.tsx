@@ -7,7 +7,7 @@ import {
   CardHeader,
 } from "./components/ui/card";
 import { Button } from "./components/ui/button";
-import { Progress } from "./components/ui/progress";
+
 import profileImage from "@/assets/Kaung Myat Kyaw.png";
 import {
   Mail,
@@ -24,7 +24,6 @@ import {
   Award,
   Lightbulb,
   Heart,
-  Printer,
   Star,
   ArrowRight,
   ChevronLeft,
@@ -36,8 +35,6 @@ import {
   Code2,
   Brain,
   Download,
-  Menu,
-  X,
   Zap,
 } from "lucide-react";
 
@@ -51,40 +48,11 @@ const slides = [
   { id: "contact", title: "Contact", icon: Mail },
 ];
 
-// Floating particles component
-const FloatingParticles = ({
-  color = "#3b82f6",
-  count = 20,
-}) => {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {Array.from({ length: count }).map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 rounded-full opacity-30"
-          style={{ backgroundColor: color }}
-          initial={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-          }}
-          animate={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-          }}
-          transition={{
-            duration: Math.random() * 20 + 10,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
+
 
 export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isNavOpen, setIsNavOpen] = useState(false);
+  
   const [typedName, setTypedName] = useState("");
   
   const fullName = "Kaung Myat Kyaw";
@@ -120,12 +88,10 @@ export default function App() {
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
-    setIsNavOpen(false);
+    
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
+  
 
   const slideVariants = {
     enter: (direction: number) => ({
@@ -154,131 +120,38 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 overflow-hidden relative">
-      {/* Animated background elements */}
-      <FloatingParticles color="#3b82f6" count={15} />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-purple-900/20" />
-
-      {/* Navigation Sidebar */}
-      <motion.div
-        className={`fixed left-0 top-0 h-full w-80 bg-slate-950/95 backdrop-blur-xl border-r border-slate-700/50 z-50 shadow-2xl ${isNavOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 lg:translate-x-0`}
-        initial={false}
-      >
-        {/* Navigation Header */}
-        <div className="p-6 border-b border-slate-700/50">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg glow-effect">
-                <span className="font-bold text-sm">KM</span>
-              </div>
-              <div>
-                <h3 className="font-semibold text-slate-100">
-                  Resume
-                </h3>
-                <p className="text-xs text-blue-400">
-                  Data Analyst
-                </p>
-              </div>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden text-slate-400 hover:text-slate-100"
-              onClick={() => setIsNavOpen(false)}
-            >
-              <X className="w-5 h-5" />
-            </Button>
-          </div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between text-sm text-slate-300 mb-2">
-            <span>Progress</span>
-            <span className="text-blue-400">
-              {Math.round(
-                ((currentSlide + 1) / slides.length) * 100,
-              )}
-              %
-            </span>
-          </div>
-          <Progress
-            value={((currentSlide + 1) / slides.length) * 100}
-            className="h-2 bg-slate-800"
-          />
-        </div>
-
-        {/* Navigation Items */}
-        <div className="px-4 py-2 space-y-1">
-          {slides.map((slide, index) => {
-            const IconComponent = slide.icon;
-            return (
-              <motion.button
+    <div className="min-h-screen bg-background overflow-hidden relative">
+      {/* New Horizontal Navigation */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container h-14 flex items-center">
+          <nav className="flex items-center space-x-4 lg:space-x-6">
+            {slides.map((slide, index) => (
+              <button
                 key={slide.id}
                 onClick={() => goToSlide(index)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                className={`text-sm font-medium transition-colors hover:text-primary ${
                   currentSlide === index
-                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg glow-effect"
-                    : "text-slate-300 hover:bg-slate-800/50 hover:text-slate-100"
+                    ? "text-primary"
+                    : "text-muted-foreground"
                 }`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
               >
-                <IconComponent className="w-5 h-5" />
-                <span className="font-medium">
-                  {slide.title}
-                </span>
-                {currentSlide === index && (
-                  <motion.div
-                    className="ml-auto w-2 h-2 bg-current rounded-full"
-                    layoutId="activeIndicator"
-                  />
-                )}
-              </motion.button>
-            );
-          })}
+                {slide.title}
+              </button>
+            ))}
+          </nav>
         </div>
+      </header>
 
-        {/* Actions */}
-        <div className="absolute bottom-6 left-4 right-4 space-y-2">
-          <Button
-            onClick={handlePrint}
-            variant="outline"
-            className="w-full bg-slate-800/50 backdrop-blur-sm border-slate-600 text-slate-300 hover:text-slate-100"
-          >
-            <Printer className="w-4 h-4 mr-2" />
-            Print Resume
-          </Button>
-          <Button
-            variant="default"
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-          >
-            <Download className="w-4 h-4 mr-2" />
-            Download PDF
-          </Button>
-        </div>
-      </motion.div>
+      {/* Animated background elements */}
+      
+      
 
-      {/* Mobile Navigation Toggle */}
-      <Button
-        variant="outline"
-        size="icon"
-        className="fixed top-4 left-4 z-40 lg:hidden bg-slate-900/80 backdrop-blur-sm border-slate-600 text-slate-300"
-        onClick={() => setIsNavOpen(!isNavOpen)}
-      >
-        <Menu className="w-5 h-5" />
-      </Button>
+      
 
-      {/* Overlay for mobile */}
-      {isNavOpen && (
-        <div
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 lg:hidden"
-          onClick={() => setIsNavOpen(false)}
-        />
-      )}
+      
 
       {/* Main Content Area */}
-      <div className="lg:ml-80 min-h-screen relative">
+      <div className="min-h-screen relative">
         {/* Slide Container */}
         <div className="h-screen overflow-hidden relative">
           <AnimatePresence mode="wait" custom={currentSlide}>
@@ -342,7 +215,7 @@ export default function App() {
               onClick={() => goToSlide(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 currentSlide === index
-                  ? "bg-blue-500 scale-125 glow-effect"
+                  ? "bg-blue-500 scale-125"
                   : "bg-slate-600 hover:bg-slate-500"
               }`}
               whileHover={{ scale: 1.2 }}
@@ -368,7 +241,7 @@ function renderSlideContent(
     case 0: // Profile/Intro
       return (
         <div className="flex flex-col items-center justify-center h-full text-center space-y-8 relative">
-          <FloatingParticles color="#8b5cf6" count={10} />
+          
 
           <motion.div
             variants={slideVariants}
@@ -377,7 +250,7 @@ function renderSlideContent(
             transition={{ delay: 0.2 }}
             className="relative"
           >
-            <div className="w-64 h-64 md:w-80 md:h-80 rounded-3xl shadow-2xl relative overflow-hidden border-4 border-slate-700/50 glow-effect">
+            <div className="w-64 h-64 md:w-80 md:h-80 rounded-3xl shadow-2xl relative overflow-hidden border-4 border-slate-700/50">
               <img
                 src={profileImage}
                 alt="Kaung Myat Kyaw"
@@ -385,7 +258,7 @@ function renderSlideContent(
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
             </div>
-            <div className="absolute -bottom-6 -right-6 w-16 h-16 bg-green-500 rounded-3xl border-8 border-slate-900 animate-pulse flex items-center justify-center">
+            <div className="absolute -bottom-6 -right-6 w-16 h-16 bg-green-500 rounded-3xl border-8 border-slate-900  flex items-center justify-center">
               <Zap className="w-8 h-8 text-white" />
             </div>
           </motion.div>
@@ -474,7 +347,7 @@ function renderSlideContent(
     case 1: // Summary
       return (
         <div className="max-w-4xl mx-auto space-y-8 relative">
-          <FloatingParticles color="#10b981" count={8} />
+          
 
           <motion.div
             variants={slideVariants}
@@ -597,7 +470,7 @@ function renderSlideContent(
     case 2: // Experience
       return (
         <div className="max-w-5xl mx-auto space-y-8 relative">
-          <FloatingParticles color="#f59e0b" count={12} />
+          
 
           <motion.div
             variants={slideVariants}
@@ -624,7 +497,7 @@ function renderSlideContent(
               transition={{ delay: 0.4 }}
               className="relative pl-8 pb-8 border-l-2 border-blue-500/50"
             >
-              <div className="absolute -left-3 top-0 w-6 h-6 bg-blue-500 rounded-full border-4 border-slate-900 shadow-lg glow-effect" />
+              <div className="absolute -left-3 top-0 w-6 h-6 bg-blue-500 rounded-full border-4 border-slate-900 shadow-lg" />
               <Card className="border-0 shadow-xl bg-gradient-to-r from-slate-800/50 via-slate-800/50 to-blue-900/30 border border-slate-700/50">
                 <CardContent className="p-8">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -876,7 +749,7 @@ function renderSlideContent(
     case 3: // Education
       return (
         <div className="max-w-4xl mx-auto space-y-8 relative">
-          <FloatingParticles color="#8b5cf6" count={10} />
+          
 
           <motion.div
             variants={slideVariants}
@@ -1007,7 +880,7 @@ function renderSlideContent(
     case 4: // Skills
       return (
         <div className="max-w-5xl mx-auto space-y-8 relative">
-          <FloatingParticles color="#10b981" count={15} />
+          
 
           <motion.div
             variants={slideVariants}
@@ -1207,7 +1080,7 @@ function renderSlideContent(
     case 5: // Personal
       return (
         <div className="max-w-4xl mx-auto space-y-8 relative">
-          <FloatingParticles color="#f59e0b" count={12} />
+          
 
           <motion.div
             variants={slideVariants}
@@ -1334,7 +1207,7 @@ function renderSlideContent(
     case 6: // Contact
       return (
         <div className="max-w-4xl mx-auto space-y-8 relative">
-          <FloatingParticles color="#3b82f6" count={8} />
+          
 
           <motion.div
             variants={slideVariants}
@@ -1438,7 +1311,7 @@ function renderSlideContent(
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button
                       size="lg"
-                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 glow-effect"
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                     >
                       <Mail className="w-5 h-5 mr-2" />
                       Send Message
