@@ -4,6 +4,7 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: './', // Use relative paths so it works on GitHub Pages/subpaths and in Notion embeds
   plugins: [react()],
   resolve: {
     alias: {

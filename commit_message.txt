@@ -1,0 +1,1 @@
+refactor: Disable Skills section and clean up App.tsx
